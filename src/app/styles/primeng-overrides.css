@@ -1,0 +1,14 @@
+/* Hide the Invalid PrimeUI License watermark for development */
+div[style*="z-index: 99999"],
+div[style*="z-index:99999"],
+div[style*="position: fixed"][style*="bottom: 1rem"],
+div[style*="position:fixed"][style*="bottom:1rem"],
+a[href*="primefaces.org/license"],
+a[href*="primeng.org/license"],
+.p-hidden-license,
+.p-license {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
