@@ -20,7 +20,8 @@ import {
   Clock,
   DollarSign,
   TrendingDown,
-  PieChart
+  PieChart,
+  Lock
 } from 'lucide-angular';
 
 export const APP_ICONS = {
@@ -45,5 +46,6 @@ export const APP_ICONS = {
   Clock,
   DollarSign,
   TrendingDown,
-  PieChart
+  PieChart,
+  Lock
 };
