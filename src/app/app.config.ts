@@ -1,25 +1,49 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { providePrimeNG } from 'primeng/config';
+import { definePreset } from '@primeuix/themes';
 import Aura from '@primeuix/themes/aura';
+import { LucideAngularModule } from 'lucide-angular';
+import { APP_ICONS } from './core/icons/lucide-icons';
+import { importProvidersFrom } from '@angular/core';
 
 import { routes } from './app.routes';
 import { jwtInterceptor } from './core/interceptors/jwt.interceptor';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
 
+const SkyBluePreset = definePreset(Aura, {
+    semantic: {
+        primary: {
+            50: '#f0f9ff',
+            100: '#e0f2fe',
+            200: '#bae6fd',
+            300: '#7dd3fc',
+            400: '#38bdf8',
+            500: '#0ea5e9',
+            600: '#0284c7',
+            700: '#0369a1',
+            800: '#075985',
+            900: '#0c4a6e',
+            950: '#082f49'
+        }
+    }
+});
+
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideZonelessChangeDetection(),
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideAnimationsAsync(),
+    provideAnimations(),
+    importProvidersFrom(LucideAngularModule.pick(APP_ICONS)),
     provideHttpClient(
       withInterceptors([jwtInterceptor, errorInterceptor])
     ),
     providePrimeNG({
         theme: {
-            preset: Aura,
+            preset: SkyBluePreset,
             options: {
                 darkModeSelector: '.my-app-dark'
             }

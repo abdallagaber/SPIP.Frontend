@@ -1,7 +1,8 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { ApiService } from '../../../core/services/api.service';
-import { AuthStorageService } from '../../../core/services/auth-storage.service';
+import { CookieUtils } from '../../../core/utils/cookie.utils';
+import { getRolesFromToken, isTokenExpired } from '../../../core/utils/jwt.utils';
 import { AUTH_ENDPOINTS } from '../../../core/constants/auth.constants';
 import { LoginRequest } from '../models/login-request.model';
 import { RegisterRequest } from '../models/register-request.model';
@@ -14,20 +15,60 @@ import { AuthResponse } from '../../../core/models/auth-response.model';
 })
 export class AuthService {
   private readonly apiService = inject(ApiService);
-  private readonly authStorage = inject(AuthStorageService);
-
-  readonly currentUser = signal<AuthUser | null>(this.authStorage.getUser());
   
-  readonly isAuthenticated = computed(() => !!this.currentUser());
+  readonly currentUser = signal<AuthUser | null>(null);
+  readonly currentToken = signal<string | null>(null);
+  
+  readonly currentRoles = computed(() => {
+    const token = this.currentToken();
+    if (!token) return [];
+    return getRolesFromToken(token);
+  });
+
+  readonly isAuthenticated = computed(() => !!this.currentToken() && !!this.currentUser());
+
+  constructor() {
+    this.restoreSession();
+  }
+
+  private restoreSession(): void {
+    const token = CookieUtils.getCookie('spip_token');
+    if (token) {
+      if (isTokenExpired(token)) {
+        this.logout();
+      } else {
+        this.currentToken.set(token);
+        const userJson = localStorage.getItem('spip_user');
+        if (userJson) {
+          try {
+            this.currentUser.set(JSON.parse(userJson) as AuthUser);
+          } catch {
+            this.logout();
+          }
+        }
+      }
+    }
+  }
 
   login(payload: LoginRequest): Observable<ApiResponse<AuthResponse>> {
     return this.apiService.post<ApiResponse<AuthResponse>>(AUTH_ENDPOINTS.login, payload).pipe(
       tap(response => {
         if (response.success && response.data) {
           const authData = response.data;
-          this.authStorage.setToken(authData.token);
-          this.authStorage.setUser(authData.user);
-          this.currentUser.set(authData.user);
+          
+          CookieUtils.setCookie('spip_token', authData.token, authData.expiresAt);
+          
+          const user: AuthUser = {
+            userId: authData.userId,
+            fullName: authData.fullName,
+            userName: authData.userName,
+            email: authData.email
+          };
+          
+          localStorage.setItem('spip_user', JSON.stringify(user));
+          
+          this.currentToken.set(authData.token);
+          this.currentUser.set(user);
         }
       })
     );
@@ -36,20 +77,31 @@ export class AuthService {
   register(payload: RegisterRequest): Observable<ApiResponse<AuthResponse>> {
     return this.apiService.post<ApiResponse<AuthResponse>>(AUTH_ENDPOINTS.register, payload).pipe(
       tap(response => {
-        // Usually, registration doesn't auto-login or might return the same payload depending on backend.
-        // We handle it here if it returns token.
         if (response.success && response.data && response.data.token) {
           const authData = response.data;
-          this.authStorage.setToken(authData.token);
-          this.authStorage.setUser(authData.user);
-          this.currentUser.set(authData.user);
+          
+          CookieUtils.setCookie('spip_token', authData.token, authData.expiresAt);
+          
+          const user: AuthUser = {
+            userId: authData.userId,
+            fullName: authData.fullName,
+            userName: authData.userName,
+            email: authData.email
+          };
+          
+          localStorage.setItem('spip_user', JSON.stringify(user));
+          
+          this.currentToken.set(authData.token);
+          this.currentUser.set(user);
         }
       })
     );
   }
 
   logout(): void {
-    this.authStorage.clear();
+    CookieUtils.removeCookie('spip_token');
+    localStorage.removeItem('spip_user');
+    this.currentToken.set(null);
     this.currentUser.set(null);
   }
 }

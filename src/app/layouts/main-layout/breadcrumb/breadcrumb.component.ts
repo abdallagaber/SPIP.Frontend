@@ -1,0 +1,67 @@
+import { Component, inject, computed } from '@angular/core';
+import { Router, NavigationEnd, RouterLink } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { filter, map } from 'rxjs';
+import { LucideAngularModule, ChevronRight, Home } from 'lucide-angular';
+
+interface BreadcrumbItem {
+  label: string;
+  url?: string;
+}
+
+@Component({
+  selector: 'app-breadcrumb',
+  standalone: true,
+  imports: [RouterLink, LucideAngularModule],
+  template: `
+    <nav class="flex items-center space-x-1 text-sm font-medium text-surface-500">
+      <a routerLink="/dashboard" class="flex items-center hover:text-primary transition-colors">
+        <lucide-icon name="home" [size]="16"></lucide-icon>
+      </a>
+      
+      @for (item of breadcrumbs(); track item.label; let last = $last) {
+        <lucide-icon name="chevron-right" [size]="16" class="text-surface-400"></lucide-icon>
+        
+        @if (!last && item.url) {
+          <a [routerLink]="item.url" class="hover:text-primary transition-colors">
+            {{ item.label }}
+          </a>
+        } @else {
+          <span class="text-surface-900 dark:text-surface-0 font-semibold">{{ item.label }}</span>
+        }
+      }
+    </nav>
+  `
+})
+export class BreadcrumbComponent {
+  private router = inject(Router);
+
+  // For now, we will simply derive breadcrumb from current url segments.
+  // In a real app we might use route data.
+  readonly breadcrumbs = toSignal(
+    this.router.events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+      map(event => this.createBreadcrumbs(event.urlAfterRedirects))
+    ),
+    { initialValue: this.createBreadcrumbs(this.router.url) }
+  );
+
+  private createBreadcrumbs(url: string): BreadcrumbItem[] {
+    const segments = url.split('/').filter(s => s);
+    const items: BreadcrumbItem[] = [];
+    let currentUrl = '';
+
+    for (const segment of segments) {
+      currentUrl += `/${segment}`;
+      // Capitalize first letter and format
+      const label = segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
+      
+      // We skip 'dashboard' since it's our root home icon
+      if (segment.toLowerCase() !== 'dashboard') {
+        items.push({ label, url: currentUrl });
+      }
+    }
+    
+    return items;
+  }
+}

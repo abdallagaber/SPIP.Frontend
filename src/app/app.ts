@@ -1,5 +1,5 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, signal, inject } from '@angular/core';
+import { RouterOutlet, Router, Event } from '@angular/router';
 import { NgxSonnerToaster } from 'ngx-sonner';
 
 @Component({
@@ -10,4 +10,6 @@ import { NgxSonnerToaster } from 'ngx-sonner';
 })
 export class App {
   protected readonly title = signal('SPIP.Frontend');
+  private readonly router = inject(Router);
+
 }

@@ -1,11 +1,11 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { AuthStorageService } from '../services/auth-storage.service';
+import { AuthService } from '../../features/auth/services/auth.service';
 import { AUTH_ENDPOINTS } from '../constants/auth.constants';
 
 export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
-  const authStorage = inject(AuthStorageService);
-  const token = authStorage.getToken();
+  const authService = inject(AuthService);
+  const token = authService.currentToken();
 
   const isAuthEndpoint = req.url.includes(AUTH_ENDPOINTS.login) || req.url.includes(AUTH_ENDPOINTS.register);
 

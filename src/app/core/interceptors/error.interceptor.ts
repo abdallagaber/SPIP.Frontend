@@ -3,13 +3,11 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 import { toast } from 'ngx-sonner';
-import { AuthStorageService } from '../services/auth-storage.service';
 import { AuthService } from '../../features/auth/services/auth.service';
 import { ApiResponse } from '../models/api-response.model';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
-  const authStorage = inject(AuthStorageService);
   const authService = inject(AuthService);
 
   return next(req).pipe(
