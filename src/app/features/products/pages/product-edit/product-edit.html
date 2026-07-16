@@ -1,0 +1,120 @@
+<div class="p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-semibold text-surface-900 dark:text-surface-0">Edit Product</h1>
+  </div>
+
+  <div class="bg-surface-0 dark:bg-surface-900 rounded-xl shadow-sm border border-surface-200 dark:border-surface-700 p-6 w-full max-w-7xl mx-auto">
+    
+    <!-- Loading State -->
+    <ng-container *ngIf="facade.updateLoading() && !facade.selectedItem()">
+      <div class="flex flex-col gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <p-skeleton width="100%" height="4rem" *ngFor="let i of [1,2,3,4,5,6]"></p-skeleton>
+        </div>
+        <p-skeleton width="100%" height="4rem"></p-skeleton>
+        <div class="flex justify-end gap-2 mt-6">
+          <p-skeleton width="6rem" height="3rem"></p-skeleton>
+          <p-skeleton width="6rem" height="3rem"></p-skeleton>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Form -->
+    <form *ngIf="!(facade.updateLoading() && !facade.selectedItem())" [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- ERP ID -->
+        <div class="flex flex-col gap-2">
+          <label for="erpId" class="font-medium text-surface-900 dark:text-surface-0">ERP ID <span class="text-red-500">*</span></label>
+          <input pInputText id="erpId" formControlName="erpId" placeholder="Enter ERP ID" />
+          <small class="text-red-500" *ngIf="form.get('erpId')?.invalid && form.get('erpId')?.touched">
+            ERP ID is required.
+          </small>
+        </div>
+
+        <!-- Name -->
+        <div class="flex flex-col gap-2">
+          <label for="name" class="font-medium text-surface-900 dark:text-surface-0">Name <span class="text-red-500">*</span></label>
+          <input pInputText id="name" formControlName="name" placeholder="Enter product name" />
+          <small class="text-red-500" *ngIf="form.get('name')?.invalid && form.get('name')?.touched">
+            Name is required.
+          </small>
+        </div>
+
+        <!-- SKU -->
+        <div class="flex flex-col gap-2">
+          <label for="sku" class="font-medium text-surface-900 dark:text-surface-0">SKU <span class="text-red-500">*</span></label>
+          <input pInputText id="sku" formControlName="sku" placeholder="Enter SKU" />
+          <small class="text-red-500" *ngIf="form.get('sku')?.invalid && form.get('sku')?.touched">
+            SKU is required.
+          </small>
+        </div>
+
+        <!-- Barcode -->
+        <div class="flex flex-col gap-2">
+          <label for="barcode" class="font-medium text-surface-900 dark:text-surface-0">Barcode</label>
+          <input pInputText id="barcode" formControlName="barcode" placeholder="Enter barcode" />
+        </div>
+
+        <!-- Unit Price -->
+        <div class="flex flex-col gap-2">
+          <label for="unitPrice" class="font-medium text-surface-900 dark:text-surface-0">Unit Price <span class="text-red-500">*</span></label>
+          <p-inputnumber formControlName="unitPrice" mode="decimal" [min]="0" inputId="unitPrice"></p-inputnumber>
+          <small class="text-red-500" *ngIf="form.get('unitPrice')?.invalid && form.get('unitPrice')?.touched">
+            Valid unit price (>= 0) is required.
+          </small>
+        </div>
+
+        <!-- UOM -->
+        <div class="flex flex-col gap-2">
+          <label for="uom" class="font-medium text-surface-900 dark:text-surface-0">UOM</label>
+          <input pInputText id="uom" formControlName="uom" placeholder="e.g., PCS, KG, L" />
+        </div>
+
+        <!-- Vendor Dropdown -->
+        <div class="flex flex-col gap-2">
+          <label for="vendorId" class="font-medium text-surface-900 dark:text-surface-0">Vendor <span class="text-red-500">*</span></label>
+          <p-select 
+            [options]="vendorLookup.vendors() || []" 
+            formControlName="vendorId" 
+            optionLabel="name" 
+            optionValue="id"
+            [filter]="true" 
+            filterBy="name,erpId" 
+            placeholder="Select a Vendor"
+            [loading]="vendorLookup.loading()"
+            [showClear]="true">
+          </p-select>
+          <small class="text-red-500" *ngIf="form.get('vendorId')?.invalid && form.get('vendorId')?.touched">
+            Vendor is required.
+          </small>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="flex flex-col gap-2 mt-2">
+        <label for="description" class="font-medium text-surface-900 dark:text-surface-0">Description</label>
+        <input pInputText id="description" formControlName="description" placeholder="Enter product description" />
+      </div>
+
+      <!-- Actions -->
+      <div class="flex justify-end gap-2 mt-6">
+        <p-button 
+          label="Cancel" 
+          icon="pi pi-times" 
+          severity="secondary" 
+          outlined 
+          [disabled]="facade.updateLoading()"
+          (onClick)="onCancel()">
+        </p-button>
+        <p-button 
+          label="Save Changes" 
+          icon="pi pi-check" 
+          type="submit" 
+          [loading]="facade.updateLoading()">
+        </p-button>
+      </div>
+
+    </form>
+  </div>
+</div>

@@ -50,12 +50,11 @@ export const DASHBOARD_ROUTES: Routes = [
   },
   {
     path: 'products',
-    canActivate: [accessGuard],
     data: {
       title: 'Products',
-      permissions: [PERMISSIONS.products.view]
+      breadcrumb: 'Products'
     } as DashboardRouteData,
-    loadComponent: () => import('./pages/products/products.component').then(m => m.ProductsComponent)
+    loadChildren: () => import('../products/products.routes').then(m => m.PRODUCTS_ROUTES)
   },
   {
     path: 'po-imports',
