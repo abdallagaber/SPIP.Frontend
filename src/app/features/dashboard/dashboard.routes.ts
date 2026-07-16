@@ -42,12 +42,11 @@ export const DASHBOARD_ROUTES: Routes = [
   },
   {
     path: 'vendors',
-    canActivate: [accessGuard],
     data: {
       title: 'Vendors',
-      permissions: [PERMISSIONS.vendors.view]
+      breadcrumb: 'Vendors'
     } as DashboardRouteData,
-    loadComponent: () => import('./pages/vendors/vendors.component').then(m => m.VendorsComponent)
+    loadChildren: () => import('../vendors/vendors.routes').then(m => m.VENDORS_ROUTES)
   },
   {
     path: 'products',

@@ -3,6 +3,7 @@ import { provideRouter } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { providePrimeNG } from 'primeng/config';
+import { MessageService } from 'primeng/api';
 import { definePreset } from '@primeuix/themes';
 import Aura from '@primeuix/themes/aura';
 import { LucideAngularModule } from 'lucide-angular';
@@ -41,6 +42,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideAnimations(),
+    MessageService,
     importProvidersFrom(LucideAngularModule.pick(APP_LUCIDE_ICONS)),
     provideHttpClient(
       withInterceptors([errorInterceptor, authInterceptor])

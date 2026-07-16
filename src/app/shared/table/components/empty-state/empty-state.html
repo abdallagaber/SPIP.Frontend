@@ -1,0 +1,11 @@
+<div class="flex flex-col items-center justify-center p-8 text-center text-surface-500">
+  <i class="pi pi-inbox text-4xl mb-4 text-surface-400"></i>
+  
+  <ng-container *ngIf="isSearch(); else defaultState">
+    <h3 class="text-lg font-semibold mb-1 text-surface-700 whitespace-pre-line">{{ searchEmptyMessage() }}</h3>
+  </ng-container>
+  
+  <ng-template #defaultState>
+    <h3 class="text-lg font-semibold mb-1 text-surface-700 whitespace-pre-line">{{ emptyMessage() }}</h3>
+  </ng-template>
+</div>

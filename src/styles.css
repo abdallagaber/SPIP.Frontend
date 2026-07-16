@@ -4,4 +4,5 @@
 @import './app/styles/tailwind.css';
 @import './app/styles/theme.css';
 @import './app/styles/primeng-overrides.css';
+@import 'primeicons/primeicons.css';
 

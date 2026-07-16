@@ -7,6 +7,7 @@ import { AUTH_ENDPOINTS, AUTH_ROUTES } from '../constants/auth.constants';
 import { AuthResponse } from '../models/auth-response.model';
 import { ApiResponse } from '../../models/api-response.model';
 import { isTokenExpired } from '../utils/jwt.util';
+import { hasPermission, hasAnyPermission, hasAllPermissions } from '../utils/permission.utils';
 import { Role, Permission } from '../models/auth.types';
 
 @Injectable({
@@ -137,17 +138,15 @@ export class AuthService {
   }
 
   hasPermission(permission: Permission): boolean {
-    return (this.authStorage.permissions() as string[]).includes(permission.toLowerCase());
+    return hasPermission(this.authStorage.permissions() as string[], permission);
   }
 
   hasAnyPermission(permissions: Permission[]): boolean {
-    const userPermissions = this.authStorage.permissions() as string[];
-    return permissions.some(p => userPermissions.includes(p.toLowerCase()));
+    return hasAnyPermission(this.authStorage.permissions() as string[], permissions);
   }
 
   hasAllPermissions(permissions: Permission[]): boolean {
-    const userPermissions = this.authStorage.permissions() as string[];
-    return permissions.every(p => userPermissions.includes(p.toLowerCase()));
+    return hasAllPermissions(this.authStorage.permissions() as string[], permissions);
   }
 
   canAccess(options: { role?: Role; permissions?: Permission[]; requireAll?: boolean }): boolean {

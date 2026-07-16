@@ -1,0 +1,35 @@
+<p-dialog 
+  header="Confirm Delete" 
+  [visible]="visible()" 
+  (visibleChange)="visibleChange.emit($event)" 
+  [modal]="true" 
+  [closable]="!loading()" 
+  [style]="{ width: '400px' }"
+  (onHide)="onHide()">
+  
+  <div class="flex items-center gap-4 py-4">
+    <i class="pi pi-exclamation-triangle text-3xl text-red-500"></i>
+    <span>{{ message() }}</span>
+  </div>
+
+  <ng-template #footer>
+    <div class="flex justify-end gap-2">
+      <p-button 
+        label="Cancel" 
+        icon="pi pi-times" 
+        [disabled]="loading()" 
+        (onClick)="onHide()" 
+        severity="secondary" 
+        outlined>
+      </p-button>
+      
+      <p-button 
+        label="Delete" 
+        icon="pi pi-trash" 
+        [loading]="loading()" 
+        (onClick)="onConfirm()" 
+        severity="danger">
+      </p-button>
+    </div>
+  </ng-template>
+</p-dialog>
