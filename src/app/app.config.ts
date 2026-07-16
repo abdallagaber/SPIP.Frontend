@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection, provideAppInitializer, inject } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
@@ -6,12 +6,13 @@ import { providePrimeNG } from 'primeng/config';
 import { definePreset } from '@primeuix/themes';
 import Aura from '@primeuix/themes/aura';
 import { LucideAngularModule } from 'lucide-angular';
-import { APP_ICONS } from './core/icons/lucide-icons';
+import { APP_LUCIDE_ICONS } from './core/icons/lucide-icons';
 import { importProvidersFrom } from '@angular/core';
 
 import { routes } from './app.routes';
-import { jwtInterceptor } from './core/interceptors/jwt.interceptor';
+import { authInterceptor } from './core/auth/interceptors/auth.interceptor';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
+import { AuthService } from './core/auth/services/auth.service';
 
 const SkyBluePreset = definePreset(Aura, {
     semantic: {
@@ -33,13 +34,16 @@ const SkyBluePreset = definePreset(Aura, {
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideAppInitializer(() => {
+        return inject(AuthService).initializeAuth();
+    }),
     provideZonelessChangeDetection(),
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideAnimations(),
-    importProvidersFrom(LucideAngularModule.pick(APP_ICONS)),
+    importProvidersFrom(LucideAngularModule.pick(APP_LUCIDE_ICONS)),
     provideHttpClient(
-      withInterceptors([jwtInterceptor, errorInterceptor])
+      withInterceptors([errorInterceptor, authInterceptor])
     ),
     providePrimeNG({
         theme: {

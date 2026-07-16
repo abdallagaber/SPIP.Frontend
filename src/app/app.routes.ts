@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './core/guards/auth.guard';
-import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
+import { authGuard } from './core/auth/guards/auth.guard';
+import { AuthenticatedLayoutComponent } from './layouts/authenticated-layout';
 
 export const routes: Routes = [
   {
@@ -9,13 +9,13 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
-    component: MainLayoutComponent,
+    component: AuthenticatedLayoutComponent,
     canActivate: [authGuard],
     loadChildren: () => import('./features/dashboard/dashboard.routes').then(m => m.DASHBOARD_ROUTES)
   },
   {
     path: 'unauthorized',
-    loadComponent: () => import('./features/errors/unauthorized/unauthorized.component').then(m => m.UnauthorizedComponent)
+    loadComponent: () => import('./features/unauthorized/unauthorized.component').then(m => m.UnauthorizedComponent)
   },
   {
     path: '',

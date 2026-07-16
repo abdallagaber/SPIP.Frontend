@@ -21,10 +21,19 @@ import {
   DollarSign,
   TrendingDown,
   PieChart,
-  Lock
+  Lock,
+  Shield,
+  Building2,
+  Package,
+  FileDown,
+  GitMerge,
+  ChartColumn,
+  UserCheck,
+  UserX,
+  Key
 } from 'lucide-angular';
 
-export const APP_ICONS = {
+export const APP_LUCIDE_ICONS = {
   Users,
   Activity,
   AlertTriangle,
@@ -47,5 +56,16 @@ export const APP_ICONS = {
   DollarSign,
   TrendingDown,
   PieChart,
-  Lock
+  Lock,
+  Shield,
+  Building2,
+  Package,
+  FileDown,
+  GitMerge,
+  ChartColumn,
+  UserCheck,
+  UserX,
+  Key
 };
+
+export type AppIcon = keyof typeof APP_LUCIDE_ICONS;

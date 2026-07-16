@@ -6,9 +6,11 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { toast } from 'ngx-sonner';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../../../core/auth/services/auth.service';
+import { AuthStorageService } from '../../../../core/auth/services/auth-storage.service';
 import { ThemeService } from '../../../../core/services/theme.service';
 import { LucideAngularModule, Moon, Sun, Monitor } from 'lucide-angular';
+import { AUTH_ROUTES } from '../../../../core/auth/constants/auth.constants';
 
 @Component({
   selector: 'app-register',
@@ -19,11 +21,18 @@ import { LucideAngularModule, Moon, Sun, Monitor } from 'lucide-angular';
 export class Register {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
+  private readonly authStorage = inject(AuthStorageService);
   private readonly router = inject(Router);
   public readonly themeService = inject(ThemeService);
 
   readonly isLoading = signal(false);
   readonly icons = { Moon, Sun, Monitor };
+
+  constructor() {
+    if (this.authStorage.isAuthenticated()) {
+      this.router.navigate(['/dashboard']);
+    }
+  }
 
   readonly registerForm = this.fb.group({
     fullName: ['', [Validators.required]],
@@ -58,8 +67,8 @@ export class Register {
       confirmPassword: formValue.confirmPassword!
     }).subscribe({
       next: () => {
-        toast.success('Registration successful. Please log in.');
-        this.router.navigate(['/auth/login']);
+        toast.success('Registration successful! Please log in.');
+        this.router.navigate([AUTH_ROUTES.login]);
         this.isLoading.set(false);
       },
       error: () => {
