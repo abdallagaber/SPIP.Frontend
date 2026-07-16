@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { API_CONFIG } from '../../../core/constants/api.constants';
+import { API_BASE_URL } from '../../../core/constants/api.constants';
 
 @Injectable({
   providedIn: 'root'
@@ -10,25 +10,25 @@ export class ApiService {
   private readonly http = inject(HttpClient);
 
   get<T>(endpoint: string, params?: Record<string, string | number | boolean>): Observable<T> {
-    return this.http.get<T>(`${API_CONFIG.baseUrl}${endpoint}`, {
+    return this.http.get<T>(`${API_BASE_URL}${endpoint}`, {
       params: this.buildParams(params)
     });
   }
 
   post<T>(endpoint: string, body: any, params?: Record<string, string | number | boolean>): Observable<T> {
-    return this.http.post<T>(`${API_CONFIG.baseUrl}${endpoint}`, body, {
+    return this.http.post<T>(`${API_BASE_URL}${endpoint}`, body, {
       params: this.buildParams(params)
     });
   }
 
   put<T>(endpoint: string, body: any, params?: Record<string, string | number | boolean>): Observable<T> {
-    return this.http.put<T>(`${API_CONFIG.baseUrl}${endpoint}`, body, {
+    return this.http.put<T>(`${API_BASE_URL}${endpoint}`, body, {
       params: this.buildParams(params)
     });
   }
 
   delete<T>(endpoint: string, params?: Record<string, string | number | boolean>): Observable<T> {
-    return this.http.delete<T>(`${API_CONFIG.baseUrl}${endpoint}`, {
+    return this.http.delete<T>(`${API_BASE_URL}${endpoint}`, {
       params: this.buildParams(params)
     });
   }

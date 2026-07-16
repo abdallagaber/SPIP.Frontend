@@ -1,0 +1,67 @@
+<div class="p-6 max-w-4xl mx-auto">
+  <div class="flex items-center gap-4 mb-6">
+    <p-button 
+      icon="pi pi-arrow-left" 
+      [text]="true" 
+      [rounded]="true" 
+      severity="secondary" 
+      (onClick)="onCancel()">
+    </p-button>
+    <h1 class="text-2xl font-semibold text-surface-900 dark:text-surface-0">Edit User</h1>
+  </div>
+
+  <div class="bg-surface-0 dark:bg-surface-900 rounded-xl shadow-sm border border-surface-200 dark:border-surface-700 p-6">
+    @if (facade.updateError()) {
+      <p-message severity="error" class="mb-6 block">{{ facade.updateError() }}</p-message>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-6">
+      
+      <div class="flex flex-col gap-2">
+        <label for="fullName" class="text-sm font-medium text-surface-900 dark:text-surface-0">Full Name</label>
+        <input pInputText id="fullName" formControlName="fullName" />
+        <small class="text-red-500" *ngIf="form.get('fullName')?.invalid && form.get('fullName')?.touched">
+          Full name is required.
+        </small>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="roleId" class="text-sm font-medium text-surface-900 dark:text-surface-0">Role</label>
+        <p-select 
+          id="roleId" 
+          formControlName="roleId" 
+          [options]="roleLookup.roles()" 
+          optionLabel="label" 
+          optionValue="value" 
+          [loading]="roleLookup.loading()"
+          placeholder="Select a role"
+          appendTo="body"
+          class="w-full">
+        </p-select>
+        <small class="text-red-500" *ngIf="form.get('roleId')?.invalid && form.get('roleId')?.touched">
+          Role is required.
+        </small>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <p-toggleswitch id="isActive" formControlName="isActive"></p-toggleswitch>
+        <label for="isActive" class="text-sm font-medium text-surface-900 dark:text-surface-0">Active</label>
+      </div>
+
+      <div class="flex justify-end gap-3 mt-4 pt-6 border-t border-surface-200 dark:border-surface-700">
+        <p-button 
+          label="Cancel" 
+          severity="secondary" 
+          [outlined]="true"
+          (onClick)="onCancel()">
+        </p-button>
+        <p-button 
+          label="Save Changes" 
+          type="submit" 
+          [loading]="facade.updateLoading()"
+          [disabled]="form.invalid || facade.updateLoading()">
+        </p-button>
+      </div>
+    </form>
+  </div>
+</div>

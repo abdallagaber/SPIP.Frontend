@@ -24,12 +24,11 @@ export const DASHBOARD_ROUTES: Routes = [
   },
   {
     path: 'users',
-    canActivate: [accessGuard],
     data: {
       title: 'Users',
-      permissions: [PERMISSIONS.users.view]
+      breadcrumb: 'Users'
     } as DashboardRouteData,
-    loadComponent: () => import('./pages/users/users.component').then(m => m.UsersComponent)
+    loadChildren: () => import('../users/users.routes').then(m => m.USERS_ROUTES)
   },
   {
     path: 'roles',

@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { API_CONFIG } from '../constants/api.constants';
+import { API_BASE_URL } from '../constants/api.constants';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,7 @@ export class ApiService {
   private readonly http = inject(HttpClient);
 
   buildUrl(endpoint: string): string {
-    return `${API_CONFIG.baseUrl}${endpoint}`;
+    return `${API_BASE_URL}${endpoint}`;
   }
 
   buildParams(params?: Record<string, string | number | boolean>): HttpParams {

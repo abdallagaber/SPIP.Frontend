@@ -1,3 +1,12 @@
-export const API_CONFIG = {
-  baseUrl: 'https://localhost:7236/api',
+import { environment } from '../../../environments/environment';
+
+export const API_BASE_URL = environment.apiBaseUrl;
+
+export const API_ENDPOINTS = {
+    auth: '/auth',
+    users: '/users',
+    roles: '/roles',
+    vendors: '/vendors',
+    products: '/products',
+    purchaseOrders: '/purchase-orders'
 };

@@ -14,6 +14,7 @@ import { routes } from './app.routes';
 import { authInterceptor } from './core/auth/interceptors/auth.interceptor';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
 import { AuthService } from './core/auth/services/auth.service';
+import { environment } from '../environments/environment';
 
 const SkyBluePreset = definePreset(Aura, {
     semantic: {
@@ -53,7 +54,8 @@ export const appConfig: ApplicationConfig = {
             options: {
                 darkModeSelector: '.my-app-dark'
             }
-        }
+        },
+        license: environment.primeUiLicense
     })
   ]
 };

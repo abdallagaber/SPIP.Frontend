@@ -45,3 +45,12 @@ Thumbs.db
 
 # Agents
 .agents/
+# Angular local environments
+src/environments/environment.local.ts
+src/environments/environment.development.ts
+src/environments/environment.production.ts
+# Local secrets
+.env
+.env.local
+.env.development.local
+.env.production.local
