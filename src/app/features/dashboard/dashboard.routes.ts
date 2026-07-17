@@ -57,12 +57,11 @@ export const DASHBOARD_ROUTES: Routes = [
   },
   {
     path: 'po-imports',
-    canActivate: [accessGuard],
     data: {
       title: 'PO Imports',
-      permissions: [PERMISSIONS.poImports.view]
+      breadcrumb: 'PO Imports'
     } as DashboardRouteData,
-    loadComponent: () => import('./pages/po-imports/po-imports.component').then(m => m.PoImportsComponent)
+    loadChildren: () => import('../purchase-orders/purchase-orders.routes').then(m => m.PURCHASE_ORDERS_ROUTES)
   },
   {
     path: 'vendor-mappings',
