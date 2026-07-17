@@ -37,7 +37,7 @@ export const DASHBOARD_ROUTES: Routes = [
       title: 'Roles',
       permissions: [PERMISSIONS.roles.view]
     } as DashboardRouteData,
-    loadComponent: () => import('./pages/roles/roles.component').then(m => m.RolesComponent)
+    loadComponent: () => import('../admin/roles/pages/roles-permissions-page/roles-permissions-page.component').then(m => m.RolesPermissionsPageComponent)
   },
   {
     path: 'vendors',

@@ -1,0 +1,67 @@
+<div class="bg-white rounded-lg shadow-sm border border-gray-200 w-full mb-4">
+  <!-- Header -->
+  <div
+    class="p-3 border-b border-gray-200 flex justify-between items-center bg-gray-50 rounded-t-lg"
+  >
+    <h2 class="text-base font-semibold text-gray-800 m-0">Roles</h2>
+    <div class="relative w-full md:w-64">
+      <i class="pi pi-search absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none"></i>
+      <input
+        type="text"
+        pInputText
+        placeholder="Search roles..."
+        class="p-inputtext-sm w-full pr-9"
+        (input)="onSearch($event)"
+      />
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div>
+    <p-table
+      [value]="facade.filteredRoles()"
+      [loading]="facade.loading()"
+      styleClass="p-datatable-sm"
+      [rowHover]="true"
+      selectionMode="single"
+      [selection]="facade.selectedRole()"
+      (selectionChange)="onSelectRole($event)"
+      dataKey="id"
+      [paginator]="true"
+      [rows]="5"
+      [rowsPerPageOptions]="[5, 10, 20]"
+    >
+      <ng-template #body let-role>
+        <tr
+          [pSelectableRow]="role"
+          [class.bg-blue-50]="facade.selectedRoleId() === role.id"
+          class="cursor-pointer"
+        >
+          <td class="py-2">
+            <div class="flex items-center">
+              <span class="font-medium text-gray-700 text-sm">{{ role.name }}</span>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template #empty>
+        <tr>
+          <td class="text-center p-4 text-gray-500 text-sm">No roles found.</td>
+        </tr>
+      </ng-template>
+
+      <ng-template #loadingbody>
+        <tr>
+          <td><p-skeleton width="100%" height="2rem"></p-skeleton></td>
+        </tr>
+        <tr>
+          <td><p-skeleton width="100%" height="2rem"></p-skeleton></td>
+        </tr>
+        <tr>
+          <td><p-skeleton width="100%" height="2rem"></p-skeleton></td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

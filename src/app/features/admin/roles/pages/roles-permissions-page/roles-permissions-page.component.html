@@ -1,0 +1,68 @@
+<div class="flex flex-col min-h-full bg-gray-100 p-4 gap-4 lg:gap-6">
+  <!-- Toolbar -->
+  <p-toolbar styleClass="bg-white rounded-lg shadow-sm border border-gray-200 w-full mb-2">
+    <div class="p-toolbar-group-start flex-1">
+      <h1 class="text-xl font-bold text-gray-800 m-0">Roles & Permissions</h1>
+    </div>
+    
+    <div class="p-toolbar-group-end gap-2 flex flex-wrap items-center justify-end">
+      <p-button 
+        icon="pi pi-refresh" 
+        [outlined]="true" 
+        severity="secondary" 
+        [pTooltip]="'Refresh'" 
+        (onClick)="refresh()">
+      </p-button>
+
+      @if (facade.selectedRole()) {
+        @if (canEditRole) {
+          <p-button 
+            icon="pi pi-pencil" 
+            [outlined]="true" 
+            severity="warn" 
+            label="Edit Role"
+            (onClick)="openEditDialog()">
+          </p-button>
+        }
+        @if (canDeleteRole) {
+          <p-button 
+            icon="pi pi-trash" 
+            [outlined]="true" 
+            severity="danger" 
+            label="Delete Role"
+            (onClick)="openDeleteDialog()">
+          </p-button>
+        }
+      }
+
+      @if (canCreateRole) {
+        <p-button 
+          icon="pi pi-plus" 
+          label="New Role" 
+          (onClick)="openCreateDialog()">
+        </p-button>
+      }
+    </div>
+  </p-toolbar>
+
+  <!-- Roles List Area -->
+  <div class="w-full">
+    <app-role-list></app-role-list>
+  </div>
+
+  <!-- Permissions Matrix Area -->
+  <div class="w-full">
+    <app-permissions-matrix></app-permissions-matrix>
+  </div>
+</div>
+
+<!-- Dialogs -->
+<app-role-dialog 
+  [(visible)]="showRoleDialog" 
+  [role]="facade.selectedRole()">
+</app-role-dialog>
+
+<app-delete-role-dialog 
+  [(visible)]="showDeleteDialog" 
+  [role]="facade.selectedRole()">
+</app-delete-role-dialog>
