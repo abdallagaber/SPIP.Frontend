@@ -56,8 +56,8 @@
                       <p-toggleswitch 
                         class="scale-90 origin-center flex items-center justify-center"
                         [ngModel]="facade.selectedPermissionIds().has(perm.id)" 
-                        (ngModelChange)="facade.togglePermission(perm.id)"
-                        [disabled]="!facade.canEditPermissions() || facade.saving()"
+                        (ngModelChange)="(!facade.canEditPermissions() || facade.saving()) ? null : facade.togglePermission(perm.id)"
+                        [readonly]="!facade.canEditPermissions() || facade.saving()"
                         [pTooltip]="perm.displayName"
                         tooltipPosition="top">
                       </p-toggleswitch>

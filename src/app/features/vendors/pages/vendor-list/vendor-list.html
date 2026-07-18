@@ -46,8 +46,8 @@
               <td>
                 <p-toggleswitch 
                   [ngModel]="vendor.isApproved" 
-                  [disabled]="!canUpdate"
-                  (onChange)="onToggleApproval(vendor)">
+                  [readonly]="!canUpdate"
+                  (onChange)="!canUpdate ? null : onToggleApproval(vendor)">
                 </p-toggleswitch>
               </td>
               <td>

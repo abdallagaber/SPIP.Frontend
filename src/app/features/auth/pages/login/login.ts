@@ -53,8 +53,17 @@ export class Login {
         this.router.navigate(['/dashboard']);
         this.isLoading.set(false);
       },
-      error: () => {
+      error: (err) => {
         this.isLoading.set(false);
+        const interceptorHandled = err.error && (
+          (err.error.errors && Array.isArray(err.error.errors)) || 
+          typeof err.error.message === 'string'
+        );
+        
+        if (!interceptorHandled) {
+          const errorMessage = err.error?.title || err.error?.detail || (typeof err.error === 'string' ? err.error : 'Login failed. Please check your credentials.');
+          toast.error(errorMessage);
+        }
       }
     });
   }

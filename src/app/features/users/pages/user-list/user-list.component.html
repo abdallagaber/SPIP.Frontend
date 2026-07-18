@@ -41,8 +41,8 @@
               <td>
                 <p-toggleswitch 
                   [ngModel]="user.isActive" 
-                  [disabled]="!canToggle"
-                  (onChange)="onToggleStatus(user)">
+                  [readonly]="!canToggle"
+                  (onChange)="!canToggle ? null : onToggleStatus(user)">
                 </p-toggleswitch>
               </td>
               <td>
